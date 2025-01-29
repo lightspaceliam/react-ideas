@@ -15,7 +15,7 @@ export const validationSchema = object<ISimpleForm>({
     firstName: string()
         .required('First name is required'),
     lastName: string()
-        .required('First name is required'),
+        .required('Last name is required'),
     email: string()
         .email('Please enter valid email')
         .required('Email is required'),

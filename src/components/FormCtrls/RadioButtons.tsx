@@ -1,6 +1,6 @@
 import { FC, JSX, ChangeEvent } from 'react';
 import ISelect from '../../interfaces/ISelect';
-import { FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { useFormikContext } from 'formik';
 
 interface IProps {
@@ -10,7 +10,6 @@ interface IProps {
     handleChange: (e: ChangeEvent<any>) => void;
     value?: ISelect;
     options?: Array<ISelect>;
-    error?: string;
     row?: boolean;
 }
 
@@ -19,7 +18,6 @@ const RadioButtons: FC<IProps> = ({
     name,
     value = undefined,
     options = [],
-    error = undefined,
     row = true,
 }): JSX.Element => {
     const formikContext = useFormikContext();
@@ -41,7 +39,6 @@ const RadioButtons: FC<IProps> = ({
         <FormControl
             fullWidth
             margin='normal'
-            error={error !== undefined}
       >
         <FormLabel htmlFor={name}>{label}</FormLabel>
         <RadioGroup
@@ -61,9 +58,6 @@ const RadioButtons: FC<IProps> = ({
             />  
           })}
         </RadioGroup>
-        {error &&
-          <FormHelperText>{error}</FormHelperText>
-        }
       </FormControl>
     );
 }

@@ -10,7 +10,7 @@ interface IProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleBlur: (e: FocusEvent<any, Element>) => void;
     value?: string | number;
-    error?: string;
+    fieldError?: string;
     type?: 'email' | 'text' | 'number'
 }
 const Input: FC<IProps> = ({
@@ -19,21 +19,21 @@ const Input: FC<IProps> = ({
     handleChange,
     handleBlur,
     value,
-    error,
+    fieldError,
     type = 'text'
 }) => {
 
     return (
-        <FormControl variant='standard' error={error !== undefined} fullWidth>
+        <FormControl variant='standard' error={fieldError !== undefined} fullWidth>
             <TextField
                 name={name}
-                error={error !== undefined}
+                error={fieldError !== undefined}
                 label={label}
                 defaultValue={value}
                 type={type}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                helperText={error}
+                helperText={fieldError}
                 variant="standard"
             />
         </FormControl>

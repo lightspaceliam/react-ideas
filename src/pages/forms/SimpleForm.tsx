@@ -1,26 +1,17 @@
 import { FC, useState } from 'react';
-import { useFormik, FormikHelpers, Formik, Form } from 'formik';
-import Grid2 from '@mui/material/Grid2';
-import Input from '../../components/FormCtrls/Input';
+import { FormikHelpers, Formik, Form } from 'formik';
+import { Grid2, Button, Typography } from '@mui/material';
 import { initialValues, preferredContactOptions, validationSchema } from './config';
-import { Button, Typography } from '@mui/material';
-import ISimpleForm from '../../interfaces/ISimpleForm';
+import Input from '../../components/FormCtrls/Input';
 import RadioButtons from '../../components/FormCtrls/RadioButtons';
+import ISimpleForm from '../../interfaces/ISimpleForm';
+import { handleFieldError } from '../../helpers/formikHelpers';
+
+import { StyledPre } from './styles/simpleForm';
 
 const SimpleForm: FC = () => {
 
     const [simpleForm, setSimpleForm] = useState<ISimpleForm>({} as ISimpleForm);
-
-    // const formik = useFormik({
-    //     initialValues: initialValues,
-    //     validationSchema: validationSchema,
-    //     onSubmit: (values, { setSubmitting }: FormikHelpers<ISimpleForm>) => {
-    //         setSubmitting(false);
-    //         setSimpleForm(values);
-    //     },
-    // });
-
-    
 
     return (
         <>
@@ -51,78 +42,78 @@ const SimpleForm: FC = () => {
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={(values: ISimpleForm, { setSubmitting }: FormikHelpers<ISimpleForm>) => {
+                onSubmit={async (values: ISimpleForm, { setSubmitting }: FormikHelpers<ISimpleForm>) => {
+                    await new Promise((r) => setTimeout(r, 500));
                     setSimpleForm(values);
                     setSubmitting(false);
-                    // setTimeout(() => {
-                    //   alert(JSON.stringify(values, null, 2));
-                    //   setSubmitting(false);
-                    // }, 500);
                   }}
             >
                 {({
                     isSubmitting,
                     handleChange,
                     handleBlur,
-                    // handleSubmit,
+                    touched,
                     values,
-                    errors,
-                    // isValid,
-                    // setFieldValue
-                    
+                    errors
                 }) => {
                 const { firstName, lastName, email, preferredContact } = values;
-
                 return (
-                    <Form>
-                        <Grid2 container spacing={2}>
-                            <Grid2 size={{ xs: 12, md: 6 }}>
-                                <Input
-                                    label='First name'
-                                    name='firstName'
-                                    handleChange={handleChange}
-                                    handleBlur={handleBlur}
-                                    value={firstName}
-                                    error={errors?.firstName}
-                                    
-                                />        
+                    <>
+                        <StyledPre>
+                            <code>
+                                {JSON.stringify(values, null, 2)}
+                            </code>
+                        </StyledPre>
+                        <br />
+                        <br />
+                        <Form>
+                            <Grid2 container spacing={2}>
+                                <Grid2 size={{ xs: 12, md: 6 }}>
+                                    <Input
+                                        label='First name'
+                                        name='firstName'
+                                        handleChange={handleChange}
+                                        handleBlur={handleBlur}
+                                        value={firstName}
+                                        fieldError={handleFieldError(touched.firstName, errors?.firstName)}
+                                        
+                                    />        
+                                </Grid2>
+                                <Grid2 size={{ xs: 12, md: 6 }}>
+                                    <Input
+                                        label='Last name'
+                                        name='lastName'
+                                        handleChange={handleChange}
+                                        handleBlur={handleBlur}
+                                        value={lastName}
+                                        fieldError={handleFieldError(touched.lastName, errors?.lastName)}
+                                    />        
+                                </Grid2>
+                                <Grid2 size={12}>
+                                    <Input
+                                        label='Email'
+                                        name='email'
+                                        handleChange={handleChange}
+                                        handleBlur={handleBlur}
+                                        value={email}
+                                        fieldError={handleFieldError(touched.email, errors?.email)}
+                                    />       
+                                </Grid2>
+                                <Grid2 size={12}>
+                                    <RadioButtons
+                                        label='Preferred contact'
+                                        name='preferredContact'
+                                        handleChange={handleChange}
+                                        options={preferredContactOptions}
+                                        value={preferredContact}
+                                    />       
+                                </Grid2>
+                                <Grid2 size={12}>
+                                    <Button type='submit' disabled={isSubmitting} variant='outlined' fullWidth>Submit</Button>
+                                </Grid2>
                             </Grid2>
-                            <Grid2 size={{ xs: 12, md: 6 }}>
-                                <Input
-                                    label='Last name'
-                                    name='lastName'
-                                    handleChange={handleChange}
-                                    handleBlur={handleBlur}
-                                    value={lastName}
-                                    error={errors?.lastName}
-                                />        
-                            </Grid2>
-                            <Grid2 size={12}>
-                                <Input
-                                    label='Email'
-                                    name='email'
-                                    handleChange={handleChange}
-                                    handleBlur={handleBlur}
-                                    value={email}
-                                    error={errors?.email}
-                                />       
-                            </Grid2>
-                            <Grid2 size={12}>
-                                <RadioButtons
-                                    label='Preferred contact'
-                                    name='preferredContact'
-                                    handleChange={handleChange}
-                                    //handleBlur={formik.handleBlur}
-                                    options={preferredContactOptions}
-                                    value={preferredContact}
-                                    error={errors?.preferredContact?.text}
-                                />       
-                            </Grid2>
-                            <Grid2 size={12}>
-                                <Button type='submit' disabled={isSubmitting} variant='outlined' fullWidth>Submit</Button>
-                            </Grid2>
-                        </Grid2>
-                    </Form>)
+                        </Form>
+                    </>)
                 }}
         </Formik>
       </>
